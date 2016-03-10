@@ -31,10 +31,7 @@ http.createServer(function(req, res) {
                 }
                 if (!postData.postVar) {
                     res.writeHead(400, {'Content-Type': 'text/html'});
-                    fs.readFile('./error.html', function(err, html) {
-                        res.write(html);
-                        res.end();
-                    });
+                    fs.createReadStream('./error.html').pipe(res);
                 } else {
                     res.writeHead(200, {'Content-Type': 'text/html'});
                     res.write(makeResponse(req, postData.postVar));
@@ -56,7 +53,7 @@ function makeResponse(req, paramValue) {
     var languageHeader = req.headers['accept-language'];
     var language = languageHeader ? languageHeader.split(',')[0] : undefined;
     var htmlSnippets = {
-        openDoc: '<!DOCTYPE html><html><meta charset "utf-8"><body><p>',
+        openDoc: '<!DOCTYPE html><html><meta charset="utf-8"><body><p>',
         languageLabel: 'Your language is: ',
         methodLabel: '<br>You sent a: ',
         parameterLabel: '<br>Your POST variable value: ',
