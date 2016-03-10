@@ -2,6 +2,11 @@ var http = require('http');
 var fs = require('fs');
 
 http.createServer(function(req, res) {
+    if (!(req.method === 'GET' || req.method === 'POST')) {
+        res.writeHead(405, {'Content-Type': 'text/plain'});
+        res.end();
+        return;
+    }
     if (req.url != '/') {
         res.writeHead(403);
         res.end();
@@ -40,9 +45,6 @@ http.createServer(function(req, res) {
     } else if (req.method === 'GET') {
         res.writeHead(200, {'Content-Type': 'text/html'});
         res.write(makeResponse(req));
-        res.end();
-    } else {
-        res.writeHead(405, {'Content-Type': 'text/plain'});
         res.end();
     }
 }).listen(8000, function() {

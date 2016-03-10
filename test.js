@@ -5,14 +5,15 @@ it('on methods other than GET or POST responds with error', function(t){
     t.plan(1);
     var options = {
         port: 8000,
-        method: 'PUT'
+        method: 'PUT',
+        path: '/home'
     };
     http.request(options, function(res) {
         t.equal(res.statusCode, 405);
     }).end();
 });
 
-it('for any POST request with postvar param sends a response with method, language, param value"', function(t) {
+it('for any POST request with postvar param sends a response with method, language, param value', function(t) {
     t.plan(6);
     var options = {
         port: 8000,
@@ -29,10 +30,10 @@ it('for any POST request with postvar param sends a response with method, langua
         });
         res.on('end', function() {
             resData = resData.join();
-            t.equal(resData.indexOf('testlanguage')>-1, true);
-            t.equal(resData.indexOf('shouldnotshow')>-1, false);
-            t.equal(resData.indexOf('POST')>-1, true);
-            t.equal(resData.indexOf('abc')>-1, true);
+            t.equal(/testlanguage/.test(resData), true);
+            t.equal(/shouldnotshow/.test(resData), false);
+            t.equal(/POST/.test(resData), true);
+            t.equal(/abc/.test(resData), true);
         
         });
         t.equal(res.statusCode, 200);
@@ -75,9 +76,9 @@ it('for GET requests sends a response with method and language', function(t) {
         });
         res.on('end', function() {
             resData = resData.join();
-            t.equal(resData.indexOf('testlanguage')>-1, true);
-            t.equal(resData.indexOf('shouldnotshow')>-1, false);
-            t.equal(resData.indexOf('GET')>-1, true);
+            t.equal(/testlanguage/.test(resData), true);
+            t.equal(/shouldnotshow/.test(resData), false);
+            t.equal(/GET/.test(resData), true);
         
         });
         t.equal(res.statusCode, 200);
